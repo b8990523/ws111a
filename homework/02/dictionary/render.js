@@ -39,7 +39,8 @@ export function layout(title, content) {
         height: 300px;
       }
   
-      input[type=text],textarea {
+      input[type=text],
+      textarea {
         border: 1px solid #eee;
         border-top-color: #ddd;
         border-left-color: #ddd;
@@ -64,19 +65,16 @@ export function layout(title, content) {
 
 export function list(posts) {
   let list = []
-  for (let post of posts) 
-  {
+  for (let post of posts) {
     list.push(`
     <li>
       <h2>${post.title }</h2>
       <h3>${post.date}</h3>
-      <p>
-       <a href="/post/${post.id}">Read post</a>
-      </p>
+      <p><a href="/post/${post.id}">Read post</a></p>
+      <p><a href="/remove/${post.id}">Remove post</a></p>
     </li>
     `)
   }
-  
   let content = `
   <h1>Posts</h1>
   <p>You have <strong>${posts.length}</strong> posts!</p>
@@ -104,6 +102,6 @@ export function newPost() {
 export function show(post) {
   return layout(post.title, `
     <h1>${post.title}</h1>
-    <pre>${post.body}</pre>
+    <p>${post.body}</p>
   `)
 }
