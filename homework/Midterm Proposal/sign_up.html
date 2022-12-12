@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>註冊用戶</title>
+    </head>
+    <style>
+       *{
+            font-family:微軟正黑體;  
+        }
+        body{
+            background-color: white;
+        }
+        .system_name{
+        /*定位對齊*/
+        position:relative;   
+        margin: auto;
+        top: 100px;
+        text-align:center; 
+        }
+        #username,#password,#check_password{
+            width: 200px;
+            height: 20px;
+            margin: 10px;
+            
+        }
+        #sign_up_container/*註冊框架設定*/{ 
+            margin: 50px;
+            padding: 10px;
+            width: 230px;
+            height: 315px;
+            background-color: white;
+            border-radius: 5px;
+            border-top: 19px solid #2b3a68;
+            box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+            
+            /*定位對齊*/
+            position:relative;   
+            margin: auto;
+            top: 100px;
+            text-align:center;  
+        }
+        input{
+        padding: 5px;
+        border: none; 
+        border:solid 1px rgb(235, 235, 235);
+        border-radius: 5px;
+        }
+        button{
+            width:200px;
+	        height: 30px;
+	        background-color: rgb(157, 192, 232);
+            border-radius: 5px;
+        }
+
+    </style>
+    <body>
+        <div class="system_name">
+            <h2>留言板註冊系統</h2>
+        </div>
+        <div align="center" id="sign_up_container">
+            <h3>註冊Sign up</h3>
+            <form>
+                <input id="username" type="text" name="username" placeholder="username"/>
+                <input id="password" type="password" name="password" placeholder="password"/>
+                <input id="check_password" type="password" name="check_password" placeholder="check_password"/>
+            </form>
+            <button class="btn" id="sign_up" onclick="add()">註冊</button>
+            
+            <p class="none">以經有帳戶?
+                <a href="sign_in.html">登入</a>
+            </p>
+        </div>
+        <script>
+            function add()
+            {
+                var User = document.getElementById('username').value;
+                var Passwd = document.getElementById('password').value;
+                var Check_Passwd = document.getElementById('check_password').value;
+                const membership = User + Passwd;
+                const checkUser = Boolean(localStorage.getItem(membership));
+                
+                if(checkUser) {
+                  return alert("此帳號已經有人使用!\n請重新輸入!")
+                }
+                else if(User == "" || Passwd == "" || Check_Passwd == "" )
+                { alert("請先填寫完整資訊!"); }
+                else if(Passwd != Check_Passwd)
+                { alert("請確認密碼是否一致!");}
+                else
+                { alert("註冊成功!，登入後即可進入留言板系統!");
+                  localStorage.setItem(membership,User);
+                  location.href = '../Midterm Proposal/sign_in.html';
+                }
+            }   
+        </script>
+    </body>
+</html>

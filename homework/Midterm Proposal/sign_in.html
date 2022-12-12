@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>用戶登入</title>
+    </head>
+    <style>
+       *{
+            font-family:微軟正黑體;  
+        }
+        body{
+            background-color: white;
+        }
+        .system_name{
+        /*定位對齊*/
+        position:relative;   
+        margin: auto;
+        top: 100px;
+        text-align:center; 
+        }
+        #username,#password{
+            width: 200px;
+            height: 20px;
+            margin: 10px;
+            color: #2e2d2d;
+        }
+        #sign_in_container/*登入框架設定*/{ 
+            margin: 50px;
+            padding: 10px;
+            width: 230px;
+            height: 300px;
+            background-color: white;
+            border-radius: 5px;
+            border-top: 19px solid #2b3a68;
+            box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+            
+            /*定位對齊*/
+            position:relative;   
+            margin: auto;
+            top: 100px;
+            text-align:center;  
+        }
+        input{
+        padding: 5px;
+        border: none; 
+        border:solid 1px rgb(235, 235, 235);
+        border-radius: 5px;
+        }
+        button{
+            width:200px;
+	        height: 30px;
+	        background-color: rgb(157, 192, 232);
+            border-radius: 5px;
+        }
+
+    </style>
+    <body>
+        <div class="system_name">
+            <h2>留言板登入系統</h2>
+        </div>
+        <div align="center" id="sign_in_container">
+            <h3>登入Sign in</h3>
+            <form>
+                <input id="username" name="username" placeholder="username"/>
+                <br>
+                <input id="password" type = "password" name="password" placeholder="password"/>
+            </form>
+            <button class="btn" id="sign_in" onclick = "login()">登入</button>
+            <p class="none">還沒有帳戶?
+                <a href="sign_up.html">註冊</a>
+            </p>
+        </div>
+    </body>
+    <script>
+        function login()
+        {
+           var User = document.getElementById('username').value;
+           var Passwd = document.getElementById('password').value;
+        
+           const membership = User + Passwd // 將帳號密碼組成 Key。
+           const userName = localStorage.getItem(membership) // 這邊將 Name(CY) 從 localStorage 裡面取出來
+           const checkUser = Boolean(userName)
+
+           
+           if(User == "")
+           { alert("請輸入帳號!");}
+           else if(Passwd=="")
+           {alert("請輸入密碼!");}
+           else if(!checkUser) 
+           { alert("帳號或密碼錯誤! 請重新確認!\n 如未註冊請先註冊!");} 
+           else if(User == userName)
+           {
+             location.href = '../Midterm Proposal/board.html';
+           }
+        }
+    </script>
+</html>

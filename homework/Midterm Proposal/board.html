@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>留言板</title>
+  </head>
+  <style>
+    body {
+      padding: 80px;
+      font: 16px Helvetica, Arial;
+    }
+    /*上傳頁面設定*/
+    #title{
+      width: 500px;
+      height: 10px;
+    }
+    #date{
+      width: 520px;
+      height: 38px;
+    }
+    textarea {
+      width: 500px;
+      height: 300px;
+    }
+    input[type=text],textarea {
+      border: 1px solid #eee;
+      border-top-color: #ddd;
+      border-left-color: #ddd;
+      border-radius: 2px;
+      padding: 15px;
+      font-size: .8em;
+    }
+    #upload_container{
+        visibility: hidden;/*剛開始消失*/
+        height: 350px;
+    }
+    #upload_container/*註冊框架設定*/{ 
+        margin: 50px;
+        padding: 10px;
+        width:600px;
+        height: 680px;
+        background-color: white;
+        border-radius: 5px;
+        border-top: 19px solid #2b3a68;
+        box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+        
+        /*定位對齊*/
+        position:relative;   
+        margin: auto;
+        top: 5px;
+        text-align: center;
+    }
+    /*上傳頁面設定*/
+    /*留言頁面設定*/
+    #show_container/*註冊框架設定*/{ 
+        margin: 50px;
+        padding-top: 10px;
+        padding-left: 50px;
+        padding-right: 50px;
+        width:500px;
+        height: 580px;
+        background-color: white;
+        border-radius: 5px;
+        border-top: 25px solid #2b3a68;
+        box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+        
+        /*定位對齊*/
+        position:relative;   
+        margin: auto;
+        top: 5px;
+    }
+    #submit{
+        position:absolute;
+        top:20px;
+        right:68px
+    }
+    #ul{
+        list-style-type:circle;
+        line-height:180%;
+        border: 1px solid black;
+    }
+    
+    /*留言頁面設定*/
+  </style>
+  <body>
+    <!--查看所有留言-->
+    <div id ="show_container">
+        <div>
+            <h1>Post</h1>
+            <ul id="ul"></ul>
+            <h5 id="submit" onclick="check()">發布新貼文:)</h5>
+        </div>
+        
+    </div>
+    <!--上傳新的留言-->
+    <div id ="upload_container">
+        <form>
+            <h2 style="color: gray;">匿名留言板</h3>
+            <h3 style="color: gray;">一個可以讓大家暢所欲言的地方~</h3>
+            <input type="text" placeholder="Title" id="title">
+            <p><input type="date" name="date" id="date"></p>
+            <p><textarea placeholder="Contents" name="body"></textarea></p>
+        </form>
+        <button onclick="submit()">發布</button>
+        <h5 onclick="check()">看看大家都在聊什麼?</button>
+    </div>
+
+    <script>
+        var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+        var txt = document.querySelector("textarea");
+        var title = document.getElementById('title');
+        var upload = document.getElementById('upload_container');
+        var show = document.getElementById('show_container');
+        var ul = document.getElementById('ul');
+
+        db.transaction(function(tx)
+        {
+            tx.executeSql("SELECT * FROM Message",[],function(tx,result)
+            {
+                for (var i=0 ; i < result.rows.length; i++)
+                {
+                    var item = result.rows.item(i);
+                    var li = document.createElement('li');
+                    li.innerText = item.title +'\n'+ item.date +'\n'+ item.contents+'\n' + '-------------';
+                    ul.append(li);
+                }
+            });
+        });
+        
+        function submit()
+        {
+            if(title.value == "" || txt.value == "")
+            { alert("內容不得為空!");}
+            else
+            {
+                alert("發布成功!");
+                db.transaction(function (tx) 
+                {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS Message (title text,date text,contents text)');
+                    tx.executeSql('INSERT INTO Message (title,date,contents ) VALUES (?,?,?)',[title.value,date.value,txt.value]);
+                    
+                    title.value = "";
+                    date.value = "";
+                    txt.value = "";
+                })
+            }
+        }
+        function check()
+        {    
+            if (show.style.display === "none") 
+            {
+                show.style.display = "block";  //upload出現
+                upload.style.display = "none";  //show消失
+            } 
+            else 
+            {
+                show.style.display = "none";   //upload消失
+                upload.style.display = "block"; //show出現
+                upload.style.visibility="visible";
+            }
+        }
+        /*
+        function Delete()
+        {
+            db.transaction(function (tx) {
+                for(var i = 0 ; i<100; i++)
+                {
+                    tx.executeSql('DELETE FROM Message WHERE rowid=?',[i]);
+                }
+            });
+        }
+        */
+     </script>
+  </body>
+</html>
