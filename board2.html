@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>留言板</title>
+  <style>
+    body { padding: 40px; font: 16px Helvetica, Arial; background: #f4f4f4; }
+    h1,h2,h3{text-align:center;}
+    #title { width:500px; height:10px; }
+    #date { width:520px; height:38px; }
+    textarea { width:500px; height:300px; }
+    input[type=text],textarea { border:1px solid #eee; border-top-color:#ddd; border-left-color:#ddd; border-radius:2px; padding:15px; font-size:.8em;}
+    #upload_container { display:none; margin:50px auto; padding:20px; width:600px; background:white; border-radius:5px; border-top:19px solid #2b3a68; box-shadow:0 0px 30px rgba(0,0,0,0.2); text-align:center;}
+    #show_container { margin:50px auto; padding:20px; width:600px; background:white; border-radius:5px; border-top:25px solid #2b3a68; box-shadow:0 0px 30px rgba(0,0,0,0.2);}
+    #newPostBtn { cursor:pointer; color:blue; text-decoration:underline; background:none; border:none; font-size:1em;}
+    ul { list-style-type:circle; line-height:180%; border:1px solid #ccc; padding:10px;}
+    li { margin-bottom:15px; white-space: pre-line; }
+    button { padding:10px 20px; margin:10px; border:none; background:#2b3a68; color:white; border-radius:4px; cursor:pointer; }
+    button:hover { background:#3d4c7a; }
+  </style>
+</head>
+<body>
+  <div id="show_container">
+    <h1>Post</h1>
+    <ul id="ul"></ul>
+    <button id="newPostBtn">發布新貼文 :)</button>
+  </div>
+
+  <div id="upload_container">
+    <form onsubmit="return false;">
+      <h2 style="color: gray;">匿名留言板</h2>
+      <h3 style="color: gray;">一個可以讓大家暢所欲言的地方 ~</h3>
+      <input type="text" placeholder="Title" id="title">
+      <p><input type="date" id="date"></p>
+      <p><textarea placeholder="Contents" id="body"></textarea></p>
+    </form>
+    <button id="submitPostBtn">發布</button>
+    <button id="backBtn">返回留言</button>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function(){
+      var txt = document.getElementById("body");
+      var title = document.getElementById('title');
+      var date = document.getElementById('date');
+      var upload = document.getElementById('upload_container');
+      var show = document.getElementById('show_container');
+      var ul = document.getElementById('ul');
+      var newPostBtn = document.getElementById('newPostBtn');
+      var submitPostBtn = document.getElementById('submitPostBtn');
+      var backBtn = document.getElementById('backBtn');
+
+      // 用陣列模擬資料庫
+      var posts = [];
+
+      function loadPosts(){
+        ul.innerHTML = "";
+        for(var i=posts.length-1;i>=0;i--){ // 最新留言在最上
+          var item = posts[i];
+          var li = document.createElement('li');
+          li.innerText = item.title + '\n' + item.date + '\n' + item.contents + '\n-------------';
+          ul.append(li);
+        }
+      }
+
+      window.check = function(){
+        console.log("check() 被觸發了");
+        if(getComputedStyle(show).display==="none"){
+          show.style.display="block";
+          upload.style.display="none";
+          loadPosts();
+        } else {
+          show.style.display="none";
+          upload.style.display="block";
+        }
+      }
+
+      function submitPost(){
+        if(title.value==="" || txt.value===""){
+          alert("內容不得為空!");
+          return;
+        }
+        posts.push({title:title.value,date:date.value,contents:txt.value});
+        title.value=""; date.value=""; txt.value="";
+        alert("發布成功!");
+        check();
+      }
+
+      newPostBtn.addEventListener('click',check);
+      backBtn.addEventListener('click',check);
+      submitPostBtn.addEventListener('click',submitPost);
+
+      loadPosts();
+    });
+  </script>
+</body>
+</html>
